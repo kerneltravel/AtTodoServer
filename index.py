@@ -2,7 +2,7 @@
 #-*- coding: utf-8 -*-
 
 import os.path
-import tornado.database
+import database
 import tornado.httpserver
 import tornado.ioloop
 import tornado.options
@@ -46,7 +46,7 @@ class Application(tornado.web.Application):
         tornado.web.Application.__init__(self, handlers, **settings)
 
         # 全局使用的数据库句柄
-        self.db = tornado.database.Connection(
+        self.db = database.Connection(
             host=options.mysql_host, database=options.mysql_database,
             user=options.mysql_user, password=options.mysql_password)
 

@@ -45,11 +45,12 @@ class LoginHandler(BaseHandler):
             if not userName:
                 emailName = email.split("@")
                 userName = emailName[0]
+            ssid = tool.md5(psw + str(time.time()))
             r = self.db().execute("INSERT INTO user (email,psw,username,ssid) "
                                   "VALUES (%s,%s,%s,%s)",
-                email, tool.md5(psw), userName[0:10], tool.md5(psw + str(time.time())))
+                email, tool.md5(psw), userName[0:10], ssid)
             if r:
-                self.success({"id": r, "username": userName, "ssid": tool.md5(psw + str(time.time())), "email": email})
+                self.success({"id": r, "username": userName, "ssid": ssid, "email": email})
             else:
                 self.error("注册失败！")
 
@@ -82,9 +83,9 @@ class LoadHandler(BaseHandler):
         list = self.db().query("SELECT * FROM todo WHERE user_id = %s AND remove < 1 "
                                "ORDER BY sort DESC,sort_s DESC"
             , self.User.id)
-        if not len(list):
-            self.error(list)
-            return
+#        if not len(list):
+#            self.error(list)
+#            return
 
         self.success(list)
 
